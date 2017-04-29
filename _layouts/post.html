@@ -82,15 +82,6 @@ layout: default
                     data-images="{% if page.header-img %}{{ page.header-img | prepend: site.img_url }}{% else %}{{ site.share_img | prepend : site.img_url | replace: '//', '/' }}{% endif %}"
                     data-content="{{ content | strip_html | truncate:80 }} | {{ site.title }}"
                     data-url="{{ page.url | prepend : site.baseurl | prepend : site.url }}">
-		    <div class="ds-share-inline">
-                      <ul  class="ds-share-icons-16">
-                        <li>分享到：</li>
-                        <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
-                        <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
-                      </ul>
-                      <div class="ds-share-icons-more">
-                      </div>
-                    </div>
                 <hr>
                 </div>
                 <!-- Duoshuo Share end-->
