@@ -37,12 +37,13 @@ navs:
 
 # foot.html
 socialname:
-  douban: ""
-  twitter: ""
-  facebook: ""
+  douban: "douban"
+  twitter: "twitter"
+  facebook: "facebook"
   github: "zhangzhe09"
   weibo: "三无码农"
-  zhihu: ""
+  zhihu: "zhihu"
+  email: "zhe-zhang@foxmail.com" 
 
 # Build settings
 # use Github Flavored Markdown !important
