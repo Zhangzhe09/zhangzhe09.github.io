@@ -4,11 +4,6 @@ title: "About"
 description: "One day, I have a dream"
 header-img: "/img/banners/the_world_is_yours.jpg"
 ---
-
-<center>
-    <p><img src="{{ site.img_url }}/img/whoami.png" align="center"></p>
-</center>
-
 >Imagination is more important than knowledge. For knowledge is limited to all we now know and understand, while imagination embraces the entire world, and all there ever will be to know and understand.  
 想象力比知识更重要，因为知识是有限的，而想象力概括着世界的一切，推动着进步，并且是知识进化的源泉。严格地说，想象力是科学研究中的实在因素。 —— 爱因斯坦
 
@@ -40,13 +35,7 @@ header-img: "/img/banners/the_world_is_yours.jpg"
 * [彩虹无线（北京）新技术有限公司](http://cihon.cn)
 
 ## More
-
 ***
-
-* Hobbies: [>>Running](/runningabout), [>>Thinking](/categories.html#person)  
-* And: [>>Badminton](/badminton.html), [>>Photography](/photography.html), [>>Cooking](/cooking.html)  
-
-<br />
 
 ###### *——Last updated on 2017-01-31 23:18:56*
 (End)
