@@ -21,7 +21,7 @@ owner:
 navs:
   -
     title: "Home"
-    url: "zhangzhe.tech"
+    url: "http://www.zhangzhe.tech"
   -
     title: "Timeline"
     url: "/documents.html"
