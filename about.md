@@ -22,7 +22,7 @@ header-img: "/img/banners/the_world_is_yours.jpg"
 
 ***
 
-* **Email**: zhe-zhang@foxmail.com
+* **Email**: <zhe-zhang@foxmail.com>
 * **Github**: <https://github.com/zhangzhe09>
 * **Weibo**: <http://weibo.com/三无码农>
 * **Zhihu**: <https://www.zhihu.com>
