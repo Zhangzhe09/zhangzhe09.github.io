@@ -16,29 +16,28 @@ header-img: "/img/banners/the_world_is_yours.jpg"
 
 ***
 
-* **Me**: biubiu
-* **Location**: Guangzhou, Guangdong
-* **Master Language**: PHP(main), Javascript, Shell, Golang
-* **Used IDE**: Sublime Text(favorite), Vim
-* **Skills**: `PHP`, `Nginx`, `Mysql`, `Redis`, `Memcache`, `JS`, `HTML`, `Ajax`, `Curl`, `Shell`, `Golang`, `Git`, `,Git-flow`, `Svn`, `Vagrant`, `Docker`, `MongoDB`, `Vim`, `Fiddler`, `Charles`, `SS`, `Markdown`, `OAuth`, `OOP`, `Https`, `Regex`...
-* **Motto**: 坚持，坚持。美好，美好。
+* **Me**: zhe.zhang
+* **Location**: ChaoYang,Beijing
+* **Master Language**: Spark,Hadoop,Java
+* **Used IDE**: Intellij IDEA,Eclipse
+* **Skills**: `Spark`, `Hadoop`, `Java`, `Android`, `Haproxy`, `Nginx`, `Git`, `Canssandra`, `Python`, `GitLab`,  `Svn`, `Vagrant`, `Docker`, `HBase`, `Vim`, `Hive`, `MapReduce`, `SS`, `Markdown`...
+* **Motto**: 越困难，就越接近成功！
 
 ## Contact
 
 ***
 
-* **Email**: 38339086@qq.com
-* **Github**: <https://github.com/bluebiu>
-* **Weibo**: <http://weibo.com/bluelooord>
-* **Zhihu**: <https://www.zhihu.com/people/bluebiu>
-* **HomePage**: <http://bluebiu.com>
+* **Email**: zhe-zhang@foxmail.com
+* **Github**: <https://github.com/zhangzhe09>
+* **Weibo**: <http://weibo.com/三无码农>
+* **Zhihu**: <https://www.zhihu.com>
+* **HomePage**: <http://zhangzhe.tech>
 
 ## Experience
 
 ***
 
-* [91wan.com](http://91wan.com)
-* [vip.com](http://vip.com)
+* [彩虹无线（北京）新技术有限公司](http://cihon.cn)
 
 ## More
 
