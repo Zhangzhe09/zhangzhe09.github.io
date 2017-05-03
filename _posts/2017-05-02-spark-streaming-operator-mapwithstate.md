@@ -18,6 +18,7 @@ last_time: "2017-05-02 14:52:32"
 
 * 源码
 看一下updateStateByKey的代码，在Dstream中并没有找到updateStateByKey()方法，因为updateStateByKey是针对Key-Value的操作，所在可以想到updateStateByKey()方法其实是在PairDStreamFunctions类中，他是通过隐式转换的方式实现的。      <br />
+
 ### 2.mapWithState
 
 * 源码
