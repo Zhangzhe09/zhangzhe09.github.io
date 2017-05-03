@@ -18,13 +18,13 @@ last_time: "2017-05-02 14:52:32"
 
 * 源码     <br />
 看一下updateStateByKey的代码，在Dstream中并没有找到updateStateByKey()方法，因为updateStateByKey是针对Key-Value的操作，所在可以想到updateStateByKey()方法其实是在PairDStreamFunctions类中，他是通过隐式转换的方式实现的。  <br />
-```
+``` 
 implicit def toPairDStreamFunctions[K, V](stream: DStream[(K, V)])    (implicit kt: ClassTag[K], vt: ClassTag[V], ord: Ordering[K] = null):  PairDStreamFunctions[K, V] = {  
    new PairDStreamFunctions[K, V](stream)
 }
-```
+``` 
 接着看updateStateByKey()方法,他有几种重载方式，最终调用以下的updateStateByKey()方法，代码如下:   <br />
-```
+``` 
 def updateStateByKey[S: ClassTag](
    updateFunc: (Iterator[(K, Seq[V], Option[S])]) => Iterator[(K, S)],
    partitioner: Partitioner,
@@ -32,9 +32,9 @@ def updateStateByKey[S: ClassTag](
  ): DStream[(K, S)] = ssc.withScope {
   new StateDStream(self, ssc.sc.clean(updateFunc), partitioner, rememberPartitioner, None)
 }
-```
+``` 
 这里实例化了一个StateDStream，看一下StateDStream的compute方法，代码如下:     <br />
-```
+``` 
 override def compute(validTime: Time): Option[RDD[(K, S)]] = {
 
  // Try to get the previous state RDD
@@ -94,9 +94,9 @@ override def compute(validTime: Time): Option[RDD[(K, S)]] = {
    }
  }
 }
-```
+``` 
 这里代码分几种情况，但最终都调用computeUsingPreviousRDD()方法，关键操作就在computeUsingPreviousRDD()方法中，代码如下:
-```
+``` 
 private [this] def computeUsingPreviousRDD (
  parentRDD : RDD[(K, V)], prevStateRDD : RDD[(K, S)]) = {
  // Define the function for the mapPartition operation on cogrouped RDD;
@@ -116,20 +116,20 @@ private [this] def computeUsingPreviousRDD (
  Some(stateRDD)
 }
 
-```
+``` 
 可以看到当前状态的RDD和前一个状态的RDD进行cogroup操作
-```
+``` 
 val cogroupedRDD = parentRDD.cogroup(prevStateRDD, partitioner)
-```
+``` 
 parentRDD中只要有一条数据就会进行cogroup操作的，并将所有数据都进行更新函数（用户定义的）的操作，所以当数据量不断增加的时候，计算量随着线性增加。
 
-###2.mapWithState
+### 2.mapWithState
 Spark 1.6之后出现。
 他是一种变通的实现，因为没法变更RDD/Partition等核心概念，所以Spark Streaming在集合元素上做了文章，定义了MapWithStateRDD，将该RDD的元素做了限定，必须是MapWithStateRDDRecord 这个东西。该MapWithStateRDDRecord 保存分区内的所有key的状态(通过stateMap记录)以及计算结果(mappedData),元素MapWithStateRDDRecord 是可变的，但是RDD 依然是不变的。
 
 * 源码
 mapWithStage和updateStateByKey一样都是在PairDtreamFuntions类中,mapWithStage代码如下：
-```
+``` 
 @Experimental
 def mapWithState[StateType: ClassTag, MappedType: ClassTag](
    spec: StateSpec[K, V, StateType, MappedType]
@@ -138,11 +138,11 @@ def mapWithState[StateType: ClassTag, MappedType: ClassTag](
    self, spec.asInstanceOf[StateSpecImpl[K, V, StateType, MappedType]]
  )
 }
-```
+``` 
 首先看注解，他是一个实验性的方法，官方还没有推荐使用。
 再看spec: StateSpec[K, V, StateType, MappedType]，这里并没有接收一个函数，而是一个StateSpec。其实就将函数包装在StateSpec内部而已
 这里实例化了一个MapWithStateDStreamImpl，代码如下
-```
+``` 
 private[streaming] class MapWithStateDStreamImpl[
  KeyType: ClassTag, ValueType: ClassTag, StateType: ClassTag, MappedType: ClassTag](
  dataStream: DStream[(KeyType, ValueType)],
@@ -184,13 +184,13 @@ def stateClass: Class[_] = implicitly[ClassTag[StateType]].runtimeClass
 
 def mappedClass: Class[_] = implicitly[ClassTag[MappedType]].runtimeClass
 }
-```
+``` 
 MapWithStateDStreamImpl的compute操作其他没有什么内容，主要是从internalStream中获取计算结果，internalStream是在MapWithStateDStreamImpl实例化的时候创建，代码如下
-```
+``` 
 private val internalStream = new InternalMapWithStateDStream[KeyType, ValueType, StateType, MappedType](dataStream, spec)
-```
+``` 
 看 InternalMapWithStateDStream的compute方法，代码如下
-```
+``` 
 override def compute(validTime: Time): Option[RDD[MapWithStateRDDRecord[K, S, E]]] = {
  // Get the previous state or create a new empty state RDD
  // 得到以前状态的RDD或创建一个空状态的RDD
@@ -225,9 +225,9 @@ override def compute(validTime: Time): Option[RDD[MapWithStateRDDRecord[K, S, E]
  }
  Some(new MapWithStateRDD(prevStateRDD, partitionedDataRDD, mappingFunction, validTime, timeoutThresholdTime))
 }
-```
+``` 
 首先获取前一个状态的RDD（prevStateRDD），prevStateRDD在第一次使用的时候调用MapWithStateRDD.createFromPairRDD方法，将自用定义的初始值放在到新生成的stageMap中;如果prevStateRDD分区和当前状态分区不同时会调用MapWithStateRDD.createFromRDD()将状态数据重新分区后放入新生成的stageMap，createFromRDD()方法和createFromPairRDD方法代码如下
-```
+``` 
 def createFromPairRDD[K: ClassTag, V: ClassTag, S: ClassTag, E: ClassTag](
    pairRDD: RDD[(K, S)],
    partitioner: Partitioner,
@@ -268,9 +268,9 @@ def createFromRDD[K: ClassTag, V: ClassTag, S: ClassTag, E: ClassTag](
 
  new MapWithStateRDD[K, V, S, E](stateRDD, emptyDataRDD, noOpFunc, updateTime, None)
 }
-```
+```  
 prevStateRDD获取之后实例化MapWithStateRDD，将前一个状态RDD和当前要计算的RDD传递进去，看MapWithStateRDD类的代码
-```
+```   
 private[streaming] class MapWithStateRDD[K: ClassTag, V: ClassTag, S: ClassTag, E: ClassTag](
  // 存储State数据的RDD
  private var prevStateRDD: RDD[MapWithStateRDDRecord[K, S, E]],
@@ -342,9 +342,9 @@ def setFullScan(): Unit = {
  doFullScan = true
 }
 }
-```
+```  
 主要看newRecord是怎样生成的，因为newRecord里有所有的状态信息和计算结果，看 MapWithStateRDDRecord.updateRecordWithData的代码
-```
+```    
 def updateRecordWithData[K: ClassTag, V: ClassTag, S: ClassTag, E: ClassTag](
  // 前一个MapWithStateRDDRecord
  prevRecord: Option[MapWithStateRDDRecord[K, S, E]],
@@ -398,19 +398,19 @@ def updateRecordWithData[K: ClassTag, V: ClassTag, S: ClassTag, E: ClassTag](
  // 所以返回计算后的结果只有当前数据的更新值
  MapWithStateRDDRecord(newStateMap, mappedData)
 }
-```
+```   
 通过上面的注释已经知道MapWithStateRDD[MapWithStateRDDRecord]类型的RDD的数据是怎么计算的了，接着看InternalMapWithStateDStream的computer方法返回后的操作
-```
+```   
 override def compute(validTime: Time): Option[RDD[MappedType]] = {
   internalStream.getOrCompute(validTime).map(x=>{
       x.flatMap[MappedType](_.mappedData )
   })
 }
-```
+```   
 使用flatMap从MapWithStateRDDRecord中获取mappedData(当前RDD进行状态计算后的结果)并返回，到这里mapWithStage的操作就完成了
-###3.Demo
+### 3.Demo
 wordCountDemo代码：
-```
+```   
 import _root_.kafka.serializer.StringDecoder
 import org.apache.spark.SparkConf
 import org.apache.spark.streaming.kafka.KafkaUtils
@@ -450,9 +450,9 @@ def main(args: Array[String]): Unit = {
  ssc.awaitTermination()
 }
 }
-```
+```    
 输入数据：
-```
+```   
  1
  2
  3
@@ -469,10 +469,10 @@ def main(args: Array[String]): Unit = {
  7
  8
  9
-```
+```    
 
 updateStateByKey结果：
-```
+```    
  -------------------------------------------
  Time: 1464516940000 ms
  -------------------------------------------
@@ -504,9 +504,9 @@ updateStateByKey结果：
  (9,1)
  (3,1)
  (1,1)
-```
+```    
 mapWithState结果：
-```
+```    
  (4,1)
  (5,1)
  (1,1)
@@ -527,6 +527,6 @@ mapWithState结果：
  (9,1)
  (6,2)
  (7,2)
-```
-####Demo结论：
+```   
+#### Demo结论：
 看以上两种操作返回的结果是不一样的，mapWithStage返回最新数据的状态结果，而updateStateByKey返回了所有状态结果，具体使用要配合业务进行调整
